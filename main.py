@@ -48,6 +48,7 @@ rifleammo = 0
 shotgunshells = 0
 rifle = False
 shotgun = 0
+trapbait = 0
 try:
     watertrap = pickle.load(open("watertrap.dat", "rb"))
 except (OSError, IOError, EOFError) as e:
@@ -56,101 +57,111 @@ except (OSError, IOError, EOFError) as e:
 def hunt():
   global skins, htcount, assortedanimalist, rifle, rifleammo, shotgun, shotgunshells
   clear()
-  print('What do you want to go for?')
-  huntanimal  = input('1 for squirrels, 2 for rabbits, and 3 for assorted')
-  if huntanimal == "1":
-    if rifle == True:
-      randomnumber1 = random.randrange(rifleammo)
-      shootanimation()
-      print('Squirrel Hunting')
-      print('You stand in a forest and shoot: ', randomnumber1, 'squirrels.')
-      skins += randomnumber1 
-      print('Total skins:')
-      print(skins)
-      rifleammo -= randomnumber1
-    elif shotgun == 1:
-      randomnumber1 = random.randrange(shotgunshells)
-      shootanimation()
-      print('Squirrel Hunting')
-      print('You stand in a forest and shoot: ', randomnumber1, 'squirrels.')
-      skins += randomnumber1 
-      print('Total skins:')
-      print(skins)
-      shotgunshells -= randomnumber1
-    else:
-      print('No guns.')
-      print('Redirecting...')
+  if guns < 1:
+    print('No guns.')
+    time.sleep(1)
+    invalid()
+  else:
+    print('What do you want to go for?')
+    huntanimal  = input('1 for squirrels, 2 for rabbits, and 3 for assorted')
+    if rifleammo < 1 and shotgunshells < 1:
+      print('No ammo.')
       time.sleep(1)
-      clear()
-      menu()
-  if huntanimal == "2":
-    if rifle == True:
-      randomnumber2 = random.randrange(rifleammo)
-      shootanimation()
-      print('Rabbit Hunting')
-      print('You stand in a forest and shoot: ', randomnumber2, 'rabbits.')
-      skins += randomnumber2 
-      print('Total skins:')
-      print(skins)
-      rifleammo -= randomnumber2
-    elif shotgun == 1:
-      randomnumber2 = random.randrange(shotgunshells)
-      shootanimation()
-      print('Rabbit Hunting')
-      print('You stand in a forest and shoot: ', randomnumber2, 'rabbits.')
-      skins += randomnumber2 
-      print('Total skins:')
-      print(skins)
-      shotgunshells -= randomnumber2
+      invalid()
     else:
-      print('No guns.')
-      print('Redirecting...')
-      time.sleep(1)
-      clear()
-      menu()  
-  if huntanimal == "3":
-    if rifle == True:
-      randomnumber3 = random.randrange(rifleammo)
-      shootanimation()
-      print('Assorted Animal Hunting')
-      print('You stand in a forest and shoot: ', randomnumber3, assortedanimallist[random.randrange(7)])
-      skins += randomnumber3 
-      print('Total skins:')
-      print(skins)
-      rifleammo -= randomnumber3
-    elif shotgun == 1:
-      randomnumber3 = random.randrange(shotgunshells)
-      shootanimation()
-      print('Assorted Animal Hunting')
-      print('You stand in a forest and shoot: ', randomnumber3, assortedanimallist[random.randrange(7)])
-      skins += randomnumber3 
-      print('Total skins:')
-      print(skins)
-      shotgunshells -= randomnumber3
-    else:
-      print('No guns.')
-      print('Redirecting...')
-      time.sleep(1)
-      clear()
-      menu()  
+      if huntanimal == "1":
+        if rifle == True:
+          randomnumber1 = random.randrange(rifleammo + 1)
+          shootanimation()
+          print('Squirrel Hunting')
+          print('You stand in a forest and shoot: ', randomnumber1, 'squirrels.')
+          skins += randomnumber1 
+          print('Total skins:')
+          print(skins)
+          rifleammo -= randomnumber1
+        elif shotgun == 1:
+          randomnumber1 = random.randrange(shotgunshells + 1)
+          shootanimation()
+          print('Squirrel Hunting')
+          print('You stand in a forest and shoot: ', randomnumber1, 'squirrels.')
+          skins += randomnumber1 
+          print('Total skins:')
+          print(skins)
+          shotgunshells -= randomnumber1
+        else:
+          print('No guns.')
+          print('Redirecting...')
+          time.sleep(1)
+          clear()
+          menu()
+      if huntanimal == "2":
+        if rifle == True:
+          randomnumber2 = random.randrange(rifleammo + 1)
+          shootanimation()
+          print('Rabbit Hunting')
+          print('You stand in a forest and shoot: ', randomnumber2, 'rabbits.')
+          skins += randomnumber2 
+          print('Total skins:')
+          print(skins)
+          rifleammo -= randomnumber2
+        elif shotgun == 1:
+          randomnumber2 = random.randrange(shotgunshells + 1)
+          shootanimation()
+          print('Rabbit Hunting')
+          print('You stand in a forest and shoot: ', randomnumber2, 'rabbits.')
+          skins += randomnumber2 
+          print('Total skins:')
+          print(skins)
+          shotgunshells -= randomnumber2
+        else:
+          print('No guns.')
+          print('Redirecting...')
+          time.sleep(1)
+          clear()
+          menu()  
+      if huntanimal == "3":
+        if rifle == True:
+          randomnumber3 = random.randrange(rifleammo + 1)
+          shootanimation()
+          print('Assorted Animal Hunting')
+          print('You stand in a forest and shoot: ', randomnumber3, assortedanimallist[random.randrange(7)])
+          skins += randomnumber3 
+          print('Total skins:')
+          print(skins)
+          rifleammo -= randomnumber3
+        elif shotgun == 1:
+          randomnumber3 = random.randrange(shotgunshells + 1)
+          shootanimation()
+          print('Assorted Animal Hunting')
+          print('You stand in a forest and shoot: ', randomnumber3, assortedanimallist[random.randrange(7)])
+          skins += randomnumber3 
+          print('Total skins:')
+          print(skins)
+          shotgunshells -= randomnumber3 
 def trap():
-  shootanimation()
-  global htcount, skins, assortedanimallist
-  randomnumber4 = random.randrange(traps + 1)
-  print('You have')
-  print(traps)
-  print('traps.')
-  print('You set a chain of your traps 1 mile out. You come out later and find ')
-  print(randomnumber4)
-  print('animals in your ')
-  print(traps)
-  print('traps.')
-  print('You caught')
-  print(randomnumber4, assortedanimallist[random.randrange(7)])
-  skins += randomnumber4
-  htcount += 1
-  print('Total skins:')
-  print(skins)
+  global traps, trapbait, skins, assortedanimallist
+  if traps < 1:
+    print('No traps')
+    invalid()
+  else:
+    if trapbait < 1:
+      print('No bait.')
+      invalid()
+    else:
+      shootanimation()
+      randomnumber4 = random.randrange(trapbait + 1)
+      print('You have', traps, 'traps and ', trapbait, 'bait.')
+      print('You set a chain of your baited traps 1 mile out. You come out later and find ')
+      print(randomnumber4)
+      print('animals in your ')
+      print(traps)
+      print('traps.')
+      print('You caught')
+      print(randomnumber4, assortedanimallist[random.randrange(7)])
+      skins += randomnumber4
+      trapbait -= randomnumber4
+      print('Total skins:')
+      print(skins)
 def watertrap1():
   shootanimation()
   global htcount, skins, assortedwateranimallist
@@ -164,7 +175,6 @@ def watertrap1():
   print('You caught')
   print(randomnumber5, assortedwateranimallist[random.randrange(4)])
   skins += randomnumber5 * 2
-  htcount += 1
   print('Total skins:')
   print(skins)
 def bigtrap1():
@@ -181,7 +191,6 @@ def bigtrap1():
   print('You caught')
   print(randomnumber6, assortedbiganimallist[random.randrange(4)])
   skins += randomnumber6 * 5
-  htcount += 1
   print('Total skins:')
   print(skins)
 def purchase(cost):
@@ -196,7 +205,6 @@ def purchase(cost):
     print('Money Balance:')
     print(money)
     print('Thank you for purchasing.')
-    time.sleep(0.5)
 def sell():
   global skins, money, sellcount
   money = money + 5
@@ -206,7 +214,6 @@ def sell():
   print(money)
   print('Skins:')
   print(skins)
-  time.sleep(0.6)
 def savequit():
   print('Saving...')
   open("moneysave.dat", "w").close()
@@ -226,7 +233,7 @@ def savequit():
   quit()
 def menu():
   clear()
-  global money, guns, traps, skins, sellcount, htcount, daysvar, days, shotgun, watertrap, bigtrap, rifleammo, shotgunshells, rifle, shotgun
+  global money, guns, traps, skins, sellcount, htcount, daysvar, days, shotgun, watertrap, bigtrap, rifleammo, shotgunshells, rifle, shotgun, trapbait
   if htcount > 0 and sellcount > 0:
     print("")
   else:
@@ -244,6 +251,8 @@ def menu():
     print(shotgunshells)
     print('Rifle Ammo:')
     print(rifleammo)
+    print('Trap Bait:')
+    print(trapbait)
     print('')
     menuinput = input('Type 1 to hunt/trap, 2 to go to store, 3 to sell skins at the market, and 4 to view instructions')
     if menuinput == "1":
@@ -316,7 +325,7 @@ def menu():
         menu()
       else:
         print('Type 1 to look at guns and ammo')
-        print('Type 2 to look at traps')
+        print('Type 2 to look at traps and trap bait')
         storetype1 = input()
         if storetype1 == "1":
           print('GUNS AND AMMO')
@@ -359,7 +368,7 @@ def menu():
             invalid()
         elif storetype1 == "2":
           print('TRAPS')
-          print('Type 1 to purchase a trap/snare(10),type 2 to purchase a water snare(1500), and type 3 to purchase a big game trap(3000)')
+          print('Type 1 to purchase a trap/snare(10),type 2 to purchase a water snare(1500), type 3 to purchase a big game trap(3000), and type 4 to purchase bait for one trap(4)(no bait required for big game trap and water snare)')
           entervar = input()
           if entervar == "1":
             print('How many do you want to buy?')
@@ -377,7 +386,6 @@ def menu():
               purchase(1500)
               quantity -= 1
               watertrap = True
-              quantity -= 1
             clear()
             menu()
           elif entervar == "3":
@@ -387,7 +395,15 @@ def menu():
               purchase(3000)
               quantity -= 1
               bigtrap += 1
+            clear()
+            menu()
+          elif entervar == "4":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(4)
               quantity -= 1
+              trapbait += 1
             clear()
             menu()
           else:
@@ -403,15 +419,13 @@ def menu():
         time.sleep(2)
         clear()
         menu()
-      elif sellcount > 0:
-        print('You have already sold once today.')
-        invalid()
       else:
         print('Type 1 to sell all skins.')
         sellvar = input()
         if sellvar == "1":
           while skins > 0:
             sell()
+          time.sleep(2)
         else:
           invalid()
         print('Thank you for selling.')
