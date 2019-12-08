@@ -1,7 +1,46 @@
-package = []
+[[package]]
+category = "main"
+description = "Command-line extract and rename utility"
+name = "clear"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[package.dependencies]
+goodlogging = "*"
+rarfile = "2.7"
+requests = "2.6.0"
+
+[[package]]
+category = "main"
+description = "Logging module for command line utilities"
+name = "goodlogging"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[[package]]
+category = "main"
+description = "RAR archive reader for Python"
+name = "rarfile"
+optional = false
+python-versions = "*"
+version = "2.7"
+
+[[package]]
+category = "main"
+description = "Python HTTP for Humans."
+name = "requests"
+optional = false
+python-versions = "*"
+version = "2.6.0"
 
 [metadata]
-content-hash = "669741988c507fb04697bdb0c9077fa1b2342c356df6ae6c96baa3119a96a9ea"
+content-hash = "17bbf960221229bc887ec4c30c5b507b3a4f87ce0b556a0c0714344a34aab8df"
 python-versions = "^3.7"
 
 [metadata.hashes]
+clear = ["5b816011de26b0966b70617bc14983eee04babc4ca9f0335e696f0d8a93ca2ec", "8cb23061fcbd94c49b242b136c504ca7701d8047c5b2232e28328d1a5abbd89e"]
+goodlogging = ["37158f8a4d8ecb7fc34961ebc51b775590a85f63934fae8c9d48d556b64e408b", "dd29a2d5cb33578efba5354036a5d025e5f537b0fd7708a36bc1bc5f87c5adf8"]
+rarfile = ["47148088ddb6c020774f4c38927fec9625ca33651bdc551bdaeafc78690b1635"]
+requests = ["1cdbed1f0e236f35ef54e919982c7a338e4fea3786310933d3a7887a04b74d75", "fdb9af60d47ca57a80df0a213336019a34ff6192d8fff361c349f2c8398fe460"]

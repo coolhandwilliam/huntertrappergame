@@ -4,6 +4,7 @@ import time
 import random
 import animations
 import pickle
+from instructions import instructions
 
 def invalid():
   print('Invalid.')
@@ -43,83 +44,95 @@ count = htcount + sellcount
 assortedanimallist = [" skunks.", " bobcats.", " coyotes.", " racoons.", " possums.", " foxes.", " badgers."]
 assortedwateranimallist = [" beavers.", " minks.", " otters.", " muskrats."]
 assortedbiganimallist = [" deer.", " elk.", " bears.", " antelope."]
-try:
-    shotgun = pickle.load(open("shotsave.dat", "rb"))
-except (OSError, IOError, EOFError) as e:
-    shotgun = False
-    pickle.dump(shotgun, open("shotsave.dat", "wb"))
-try:
-    watertrap = pickle.load(open("watertrap.dat", "rb"))
-except (OSError, IOError, EOFError) as e:
-    watertrap = False
-    pickle.dump(watertrap, open("watertrap.dat", "wb"))
+rifleammo = 0
+shotgunshells = 0
+rifle = False
+shotgun = 0
 try:
     watertrap = pickle.load(open("watertrap.dat", "rb"))
 except (OSError, IOError, EOFError) as e:
     watertrap = False
     pickle.dump(watertrap, open("watertrap.dat", "wb"))
-def nextDay():
-  global days
-  days += 1
-def shotgunhunt(nameofanimal):
-  shootanimation()
-  randomnumber7 = random.randrange(10)
-  print(nameofanimal,' Hunting')
-  print('You walk for a few miles and shoot:')
-  print(randomnumber7, ' ', nameofanimal, 's.')
-  skins = skins + randomnumber7 * 2
-  print('Total skins:')
-  print(skins)
 def hunt():
-  global skins, htcount, assortedanimalist
+  global skins, htcount, assortedanimalist, rifle, rifleammo, shotgun, shotgunshells
   clear()
   print('What do you want to go for?')
   huntanimal  = input('1 for squirrels, 2 for rabbits, and 3 for assorted')
   if huntanimal == "1":
-    shootanimation()
-    randomnumber1 = random.randrange(5)
-    if shotgun == True:
-      shotgunhunt('squirrel')
-    else:
-      randomnumber1 = random.randrange(5)
+    if rifle == True:
+      randomnumber1 = random.randrange(rifleammo)
       shootanimation()
       print('Squirrel Hunting')
-      print('You stand in a forest and shoot:')
-      print(randomnumber1)
-      print('squirrels.')
+      print('You stand in a forest and shoot: ', randomnumber1, 'squirrels.')
       skins += randomnumber1 
       print('Total skins:')
       print(skins)
-  elif huntanimal == "2":
-    shootanimation()
-    randomnumber2 = random.randrange(10)
-    if shotgun == True:
-      shotgunhunt('rabbit')
+      rifleammo -= randomnumber1
+    elif shotgun == 1:
+      randomnumber1 = random.randrange(shotgunshells)
+      shootanimation()
+      print('Squirrel Hunting')
+      print('You stand in a forest and shoot: ', randomnumber1, 'squirrels.')
+      skins += randomnumber1 
+      print('Total skins:')
+      print(skins)
+      shotgunshells -= randomnumber1
     else:
-      randomnumber2 = random.randrange(5)
+      print('No guns.')
+      print('Redirecting...')
+      time.sleep(1)
+      clear()
+      menu()
+  if huntanimal == "2":
+    if rifle == True:
+      randomnumber2 = random.randrange(rifleammo)
       shootanimation()
       print('Rabbit Hunting')
-      print('You walk for 3 miles and shoot:')
-      print(randomnumber2)
-      print('rabbits.')
-      skins += randomnumber2
+      print('You stand in a forest and shoot: ', randomnumber2, 'rabbits.')
+      skins += randomnumber2 
       print('Total skins:')
       print(skins)
-  elif huntanimal == "3":
-    if shotgun == True:
-      shotgunhunt('assorted animal')
-    else:
+      rifleammo -= randomnumber2
+    elif shotgun == 1:
+      randomnumber2 = random.randrange(shotgunshells)
       shootanimation()
-      randomnumber3 = random.randrange(3)
-      print('Assorted Animal Hunting')
-      print('You walk for a few miles and shoot:')
-      print(randomnumber3, assortedanimallist[random.randrange(7)])
-      skins += randomnumber3
-      htcount += 1
+      print('Rabbit Hunting')
+      print('You stand in a forest and shoot: ', randomnumber2, 'rabbits.')
+      skins += randomnumber2 
       print('Total skins:')
       print(skins)
-  else:
-    invalid()
+      shotgunshells -= randomnumber2
+    else:
+      print('No guns.')
+      print('Redirecting...')
+      time.sleep(1)
+      clear()
+      menu()  
+  if huntanimal == "3":
+    if rifle == True:
+      randomnumber3 = random.randrange(rifleammo)
+      shootanimation()
+      print('Assorted Animal Hunting')
+      print('You stand in a forest and shoot: ', randomnumber3, assortedanimallist[random.randrange(7)])
+      skins += randomnumber3 
+      print('Total skins:')
+      print(skins)
+      rifleammo -= randomnumber3
+    elif shotgun == 1:
+      randomnumber3 = random.randrange(shotgunshells)
+      shootanimation()
+      print('Assorted Animal Hunting')
+      print('You stand in a forest and shoot: ', randomnumber3, assortedanimallist[random.randrange(7)])
+      skins += randomnumber3 
+      print('Total skins:')
+      print(skins)
+      shotgunshells -= randomnumber3
+    else:
+      print('No guns.')
+      print('Redirecting...')
+      time.sleep(1)
+      clear()
+      menu()  
 def trap():
   shootanimation()
   global htcount, skins, assortedanimallist
@@ -173,11 +186,17 @@ def bigtrap1():
   print(skins)
 def purchase(cost):
   global money
-  money = money - cost
-  print('Money Balance:')
-  print(money)
-  print('Thank you for purchasing.')
-  time.sleep(2)
+  if(cost > money):
+    print('Not enough money. Redirecting to menu.')
+    time.sleep(1)
+    clear()
+    menu()
+  else:
+    money = money - cost
+    print('Money Balance:')
+    print(money)
+    print('Thank you for purchasing.')
+    time.sleep(0.5)
 def sell():
   global skins, money, sellcount
   money = money + 5
@@ -207,7 +226,7 @@ def savequit():
   quit()
 def menu():
   clear()
-  global money, guns, traps, skins, sellcount, htcount, daysvar, days, shotgun, watertrap, bigtrap
+  global money, guns, traps, skins, sellcount, htcount, daysvar, days, shotgun, watertrap, bigtrap, rifleammo, shotgunshells, rifle, shotgun
   if htcount > 0 and sellcount > 0:
     print("")
   else:
@@ -221,7 +240,12 @@ def menu():
     print(traps)
     print('Skins:')
     print(skins)
-    menuinput = input('Type 1 to hunt/trap, 2 to go to store, 3 to sell skins at the market, and 4 to save and quit')
+    print('Shotgun Shells:')
+    print(shotgunshells)
+    print('Rifle Ammo:')
+    print(rifleammo)
+    print('')
+    menuinput = input('Type 1 to hunt/trap, 2 to go to store, 3 to sell skins at the market, and 4 to view instructions')
     if menuinput == "1":
       clear()
       print('Guns:')
@@ -291,24 +315,46 @@ def menu():
         print('Sorry, you have no money. Sell some skins to make some!')
         menu()
       else:
-        print('Type 1 to look at guns')
+        print('Type 1 to look at guns and ammo')
         print('Type 2 to look at traps')
         storetype1 = input()
         if storetype1 == "1":
-          print('GUNS')
-          print('Type 1 to buy a rifle (60 coins) or 2 to buy a shotgun(1000 coins)(major benefits)')
+          print('GUNS AND AMMO')
+          print('Type 1 to buy a rifle (60 coins), 2 to buy a shotgun(70 coins)(cheaper shells), and 3 to view shells.')
           gunpurchase1 = input()
           if gunpurchase1 == "1":
             purchase(60)
+            rifle = True
             guns += 1
             clear()
             menu()
           elif gunpurchase1 == "2":
-            purchase(1000)
+            purchase(70)
             guns += 1
+            shotgun = 1
             clear()
             menu()
-            shotgun = True
+          elif gunpurchase1 == "3":
+            print('Type 1 to buy rifle ammunition(2) and 2 to buy shotgun shells(1)')
+            ammopurchase1 = input()
+            if ammopurchase1 == "1":
+              print('How many do you want to buy?')
+              quantity = int(input())
+              while quantity > 0:
+                purchase(2)
+                quantity -= 1
+                rifleammo += 1
+              clear()
+              menu()
+            elif ammopurchase1 == "2":
+              print('How many do you want to buy?')
+              quantity = int(input())
+              while quantity > 0:
+                purchase(1)
+                quantity -= 1
+                shotgunshells += 1
+              clear()
+              menu()
           else: 
             invalid()
         elif storetype1 == "2":
@@ -316,18 +362,32 @@ def menu():
           print('Type 1 to purchase a trap/snare(10),type 2 to purchase a water snare(1500), and type 3 to purchase a big game trap(3000)')
           entervar = input()
           if entervar == "1":
-            purchase(10)
-            traps += 1
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(10)
+              quantity -= 1
+              traps += 1
             clear()
             menu()
           elif entervar == "2":
-            purchase(1500)
-            watertrap = True
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(1500)
+              quantity -= 1
+              watertrap = True
+              quantity -= 1
             clear()
             menu()
           elif entervar == "3":
-            purchase(3000)
-            bigtrap = 1
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(3000)
+              quantity -= 1
+              bigtrap += 1
+              quantity -= 1
             clear()
             menu()
           else:
@@ -359,7 +419,11 @@ def menu():
         clear()
         menu()
     elif menuinput == "4":
-      savequit()
+      instructions()
+      print('Press enter to continue')
+      entervar2 = input()
+      clear()
+      menu()
     else: 
       invalid()
 x = 0
@@ -369,7 +433,5 @@ def startGame():
   while x < 5:
     shootanimation()
     x+=1
-  print("Play this game for as long as you would like. Your money is your score. Use a timer for 5 minutes and beat your or your friend's high score!")
-  time.sleep(2)
   menu()
 startGame()
