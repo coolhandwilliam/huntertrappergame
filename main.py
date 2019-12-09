@@ -5,7 +5,8 @@ import random
 import animations
 import pickle
 from instructions import instructions
-
+from levels import levelUp
+import math
 def invalid():
   print('Invalid.')
   time.sleep(1)
@@ -49,13 +50,23 @@ shotgunshells = 0
 rifle = False
 shotgun = 0
 trapbait = 0
+xp = 10
+level = 0
+level1 = False
+level2 = False
+level3 = False
+level4 = False
+level5 = False
 try:
     watertrap = pickle.load(open("watertrap.dat", "rb"))
 except (OSError, IOError, EOFError) as e:
     watertrap = False
     pickle.dump(watertrap, open("watertrap.dat", "wb"))
+def namecall():
+  print('What is the name of your hunting and trapping company?')
+  businessname = input()
 def hunt():
-  global skins, htcount, assortedanimalist, rifle, rifleammo, shotgun, shotgunshells
+  global skins, htcount, assortedanimalist, rifle, rifleammo, shotgun, shotgunshells, xp
   clear()
   if guns < 1:
     print('No guns.')
@@ -70,7 +81,7 @@ def hunt():
       invalid()
     else:
       if huntanimal == "1":
-        if rifle == True:
+        if rifle == True and shotgun == 0:
           randomnumber1 = random.randrange(rifleammo + 1)
           shootanimation()
           print('Squirrel Hunting')
@@ -79,7 +90,8 @@ def hunt():
           print('Total skins:')
           print(skins)
           rifleammo -= randomnumber1
-        elif shotgun == 1:
+          xp += math.floor(randomnumber1 / 10)
+        elif shotgun == 1 and rifle == False:
           randomnumber1 = random.randrange(shotgunshells + 1)
           shootanimation()
           print('Squirrel Hunting')
@@ -88,6 +100,17 @@ def hunt():
           print('Total skins:')
           print(skins)
           shotgunshells -= randomnumber1
+          xp += math.floor(randomnumber1 / 10)
+        elif shotgun == 1 and rifle == True:
+          randomnumber1 = random.randrange(shotgunshells + 1)
+          shootanimation()
+          print('Squirrel Hunting')
+          print('You stand in a forest and shoot: ', randomnumber1, 'squirrels.')
+          skins += randomnumber1 
+          print('Total skins:')
+          print(skins)
+          shotgunshells -= randomnumber1
+          xp += math.floor(randomnumber1 / 10)
         else:
           print('No guns.')
           print('Redirecting...')
@@ -95,7 +118,7 @@ def hunt():
           clear()
           menu()
       if huntanimal == "2":
-        if rifle == True:
+        if rifle == True and shotgun == 0:
           randomnumber2 = random.randrange(rifleammo + 1)
           shootanimation()
           print('Rabbit Hunting')
@@ -104,7 +127,8 @@ def hunt():
           print('Total skins:')
           print(skins)
           rifleammo -= randomnumber2
-        elif shotgun == 1:
+          xp += math.floor(randomnumber2 / 10)
+        elif shotgun == 1 and rifle == False:
           randomnumber2 = random.randrange(shotgunshells + 1)
           shootanimation()
           print('Rabbit Hunting')
@@ -113,6 +137,17 @@ def hunt():
           print('Total skins:')
           print(skins)
           shotgunshells -= randomnumber2
+          xp += math.floor(randomnumber2 / 10)
+        elif shotgun == 1 and rifle == True:
+          randomnumber2 = random.randrange(shotgunshells + 1)
+          shootanimation()
+          print('Rabbit Hunting')
+          print('You stand in a forest and shoot: ', randomnumber2, 'rabbits.')
+          skins += randomnumber2 
+          print('Total skins:')
+          print(skins)
+          shotgunshells -= randomnumber2
+          xp += math.floor(randomnumber2 / 10)
         else:
           print('No guns.')
           print('Redirecting...')
@@ -120,7 +155,7 @@ def hunt():
           clear()
           menu()  
       if huntanimal == "3":
-        if rifle == True:
+        if rifle == True and shotgun == 0:
           randomnumber3 = random.randrange(rifleammo + 1)
           shootanimation()
           print('Assorted Animal Hunting')
@@ -129,7 +164,8 @@ def hunt():
           print('Total skins:')
           print(skins)
           rifleammo -= randomnumber3
-        elif shotgun == 1:
+          xp += math.floor(randomnumber3 / 10)
+        elif shotgun == 1 and rifle == False:
           randomnumber3 = random.randrange(shotgunshells + 1)
           shootanimation()
           print('Assorted Animal Hunting')
@@ -138,8 +174,19 @@ def hunt():
           print('Total skins:')
           print(skins)
           shotgunshells -= randomnumber3 
+          xp += math.floor(randomnumber3 / 10)
+        elif shotgun == 1 and rifle == True:
+          randomnumber3 = random.randrange(shotgunshells + 1)
+          shootanimation()
+          print('Assorted Animal Hunting')
+          print('You stand in a forest and shoot: ', randomnumber3, assortedanimallist[random.randrange(7)])
+          skins += randomnumber3 
+          print('Total skins:')
+          print(skins)
+          shotgunshells -= randomnumber3 
+          xp += math.floor(randomnumber3 / 10)
 def trap():
-  global traps, trapbait, skins, assortedanimallist
+  global traps, trapbait, skins, assortedanimallist, xp
   if traps < 1:
     print('No traps')
     invalid()
@@ -162,9 +209,15 @@ def trap():
       trapbait -= randomnumber4
       print('Total skins:')
       print(skins)
+      xp += math.floor(randomnumber4 / 10)
+def claimmoney(amount):
+  global money
+  print('To add ', amount, ' coins to your money, press enter')
+  addmoney = input()
+  money += amount
 def watertrap1():
   shootanimation()
-  global htcount, skins, assortedwateranimallist
+  global htcount, skins, assortedwateranimallist, xp
   randomnumber5 = random.randrange(traps + 2)
   print('You have')
   print(traps)
@@ -177,8 +230,9 @@ def watertrap1():
   skins += randomnumber5 * 2
   print('Total skins:')
   print(skins)
+  xp += math.floor(randomnumber5 / 10)
 def bigtrap1():
-  global bigtrap
+  global bigtrap, xp
   shootanimation()
   global htcount, skins, assortedbiganimallist
   randomnumber6 = random.randrange(2)
@@ -193,6 +247,7 @@ def bigtrap1():
   skins += randomnumber6 * 5
   print('Total skins:')
   print(skins)
+  xp += math.floor(randomnumber5 / 10)
 def purchase(cost):
   global money
   if(cost > money):
@@ -233,26 +288,60 @@ def savequit():
   quit()
 def menu():
   clear()
-  global money, guns, traps, skins, sellcount, htcount, daysvar, days, shotgun, watertrap, bigtrap, rifleammo, shotgunshells, rifle, shotgun, trapbait
+  global money, guns, traps, skins, sellcount, htcount, daysvar, days, shotgun, watertrap, bigtrap, rifleammo, shotgunshells, rifle, shotgun, trapbait, level, xp, level1, level2, level3, level4, level5
+  if xp == 10:
+    if level1 == True:
+      levelUp(1)
+    else:
+      levelUp(1)
+      level += 1
+      level1 = True
+  elif xp >= 50 and xp <= 99:
+    if level2 == True:
+      levelUp(2)
+    else:
+      levelUp(2)
+      level += 1
+      level2 = True
+  elif xp >= 100 and xp <= 199:
+    if level3 == True:
+      levelUp(3)
+    else:
+      levelUp(3)
+      level += 3
+      level3 = True
+  elif xp >= 200 and xp <= 399:
+    if level4 == True:
+      levelUp(4)
+    else:
+      levelUp(4)
+      level += 1
+      level4 = True
+  elif xp >= 200 and xp <= 1000000000:
+    if level5 == True:
+      print('Level up!')
+      print('Now level ', level)
+      print('Everything in the store is now 50% off!')
+    else:
+      print('Level up!')
+      print('Now level ', level)
+      print('Everything in the store is now 50% off!')
+      level += 5
+      level5 = True
   if htcount > 0 and sellcount > 0:
     print("")
   else:
     htcount = 0
     sellcount = 0
-    print('Money:')
-    print(money)
-    print('Guns:')
-    print(guns)
-    print('Traps:')
-    print(traps)
-    print('Skins:')
-    print(skins)
-    print('Shotgun Shells:')
-    print(shotgunshells)
-    print('Rifle Ammo:')
-    print(rifleammo)
-    print('Trap Bait:')
-    print(trapbait)
+    print('Level ', level)
+    print('XP: ', xp)
+    print('Money: ', money)
+    print('Guns: ', guns)
+    print('Traps: ', traps)
+    print('Skins: ', skins)
+    print('Shotgun Shells: ',shotgunshells)
+    print('Rifle Ammo: ', rifleammo)
+    print('Trap Bait: ', trapbait)
     print('')
     menuinput = input('Type 1 to hunt/trap, 2 to go to store, 3 to sell skins at the market, and 4 to view instructions')
     if menuinput == "1":
@@ -323,52 +412,41 @@ def menu():
         clear()
         print('Sorry, you have no money. Sell some skins to make some!')
         menu()
-      else:
+      elif level == 1:
         print('Type 1 to look at guns and ammo')
         print('Type 2 to look at traps and trap bait')
         storetype1 = input()
         if storetype1 == "1":
           print('GUNS AND AMMO')
-          print('Type 1 to buy a rifle (60 coins), 2 to buy a shotgun(70 coins)(cheaper shells), and 3 to view shells.')
+          print('Type 1 to buy a rifle (60 coins) and 2 to buy rifle ammo')
           gunpurchase1 = input()
           if gunpurchase1 == "1":
             purchase(60)
             rifle = True
             guns += 1
+            xp += 5
             clear()
             menu()
-          elif gunpurchase1 == "2":
-            purchase(70)
-            guns += 1
-            shotgun = 1
+          if gunpurchase1 == "2":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(2)
+              quantity -= 1
+              rifleammo += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
             clear()
             menu()
-          elif gunpurchase1 == "3":
-            print('Type 1 to buy rifle ammunition(2) and 2 to buy shotgun shells(1)')
-            ammopurchase1 = input()
-            if ammopurchase1 == "1":
-              print('How many do you want to buy?')
-              quantity = int(input())
-              while quantity > 0:
-                purchase(2)
-                quantity -= 1
-                rifleammo += 1
-              clear()
-              menu()
-            elif ammopurchase1 == "2":
-              print('How many do you want to buy?')
-              quantity = int(input())
-              while quantity > 0:
-                purchase(1)
-                quantity -= 1
-                shotgunshells += 1
-              clear()
-              menu()
           else: 
             invalid()
         elif storetype1 == "2":
           print('TRAPS')
-          print('Type 1 to purchase a trap/snare(10),type 2 to purchase a water snare(1500), type 3 to purchase a big game trap(3000), and type 4 to purchase bait for one trap(4)(no bait required for big game trap and water snare)')
+          print('Type 1 to purchase a trap/snare(10) and type 2 to purchase bait for one trap(4)')
           entervar = input()
           if entervar == "1":
             print('How many do you want to buy?')
@@ -377,34 +455,416 @@ def menu():
               purchase(10)
               quantity -= 1
               traps += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
             clear()
             menu()
           elif entervar == "2":
             print('How many do you want to buy?')
             quantity = int(input())
             while quantity > 0:
-              purchase(1500)
+              purchase(4)
               quantity -= 1
-              watertrap = True
+              trapbait += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
             clear()
             menu()
-          elif entervar == "3":
+          else:
+            invalid()
+        else:
+          invalid()
+      elif level == 2:
+        print('Type 1 to look at guns and ammo')
+        print('Type 2 to look at traps and trap bait')
+        storetype1 = input()
+        if storetype1 == "1":
+          print('GUNS AND AMMO')
+          print('Type 1 to buy a rifle (60 coins) and 2 to buy rifle ammo')
+          gunpurchase1 = input()
+          if gunpurchase1 == "1":
+            purchase(60)
+            rifle = True
+            guns += 1
+            clear()
+            menu()
+            xp += 5
+          if gunpurchase1 == "2":
             print('How many do you want to buy?')
             quantity = int(input())
             while quantity > 0:
-              purchase(3000)
+              purchase(2)
               quantity -= 1
-              bigtrap += 1
+              rifleammo += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
             clear()
             menu()
-          elif entervar == "4":
+          else: 
+            invalid()
+        elif storetype1 == "2":
+          print('TRAPS')
+          print('Type 1 to purchase a trap/snare(10), type 2 to purchase bait for one trap(4), and type 3 to purchase a water snare.(250)(no bait needed)')
+          entervar = input()
+          if entervar == "1":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(10)
+              quantity -= 1
+              traps += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif entervar == "2":
             print('How many do you want to buy?')
             quantity = int(input())
             while quantity > 0:
               purchase(4)
               quantity -= 1
               trapbait += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
             clear()
+            menu()
+          elif entervar == "3":
+            purchase(4)
+            watertrap = True
+            traps += 1
+            xp += 5
+            clear()
+            menu()
+          else:
+            invalid()
+        else:
+          invalid()
+      elif level == 3:
+        print('Type 1 to look at guns and ammo')
+        print('Type 2 to look at traps and trap bait')
+        storetype1 = input()
+        if storetype1 == "1":
+          print('GUNS AND AMMO')
+          print('Type 1 to buy a rifle (60 coins), 2 to buy rifle ammo(2 each), 3 to buy a shotgun(100)(cheaper shells), and 4 to buy shotgun shells(1)')
+          gunpurchase1 = input()
+          if gunpurchase1 == "1":
+            purchase(60)
+            rifle = True
+            guns += 1
+            clear()
+            menu()
+            xp += 5
+          if gunpurchase1 == "2":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(2)
+              quantity -= 1
+              rifleammo += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif gunpurchase1 == "3":
+            purchase(100)
+            shotgun = 1
+            guns += 1
+            clear()
+            menu()
+            xp += 5
+          if gunpurchase1 == "4":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(1)
+              quantity -= 1
+              shotgunshells += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+                xp += 1
+            clear()
+            menu()
+          else: 
+            invalid()
+        elif storetype1 == "2":
+          print('TRAPS')
+          print('Type 1 to purchase a trap/snare(10), type 2 to purchase bait for one trap(4), and type 3 to purchase a water snare(250)(no bait needed)')
+          entervar = input()
+          if entervar == "1":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(10)
+              quantity -= 1
+              traps += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif entervar == "2":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(4)
+              quantity -= 1
+              trapbait += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif entervar == "3":
+            purchase(250)
+            watertrap = True
+            traps += 1
+            clear()
+            menu()
+            xp += 5
+          else:
+            invalid()
+        else:
+          invalid()
+      elif level == 4:
+        print('Type 1 to look at guns and ammo')
+        print('Type 2 to look at traps and trap bait')
+        storetype1 = input()
+        if storetype1 == "1":
+          print('GUNS AND AMMO')
+          print('Type 1 to buy a rifle (60 coins), 2 to buy rifle ammo(2 each), 3 to buy a shotgun(100)(cheaper shells), and 4 to buy shotgun shells(1)')
+          gunpurchase1 = input()
+          if gunpurchase1 == "1":
+            purchase(60)
+            rifle = True
+            guns += 1
+            clear()
+            menu()
+            xp += 5
+          if gunpurchase1 == "2":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(2)
+              quantity -= 1
+              rifleammo += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif gunpurchase1 == "3":
+            purchase(100)
+            shotgun = 1
+            guns += 1
+            clear()
+            menu()
+            xp += 5
+          if gunpurchase1 == "4":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(1)
+              quantity -= 1
+              shotgunshells += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+                xp += 1
+            clear()
+            menu()
+          else: 
+            invalid()
+        elif storetype1 == "2":
+          print('TRAPS')
+          print('Type 1 to purchase a trap/snare(10), type 2 to purchase bait for one trap(4), type 3 to purchase a water snare(250)(no bait needed), and type 4 to purchase a big game trap(500)(no bait needed)')
+          entervar = input()
+          if entervar == "1":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(10)
+              quantity -= 1
+              traps += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif entervar == "2":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(4)
+              quantity -= 1
+              trapbait += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif entervar == "3":
+            purchase(250)
+            watertrap = True
+            traps += 1
+            clear()
+            menu()
+            xp += 5
+          elif entervar == "4":
+            purchase(500)
+            bigtrap = 1
+            traps += 1
+            clear()
+            xp += 5
+            menu()
+          else:
+            invalid()
+        else:
+          invalid()
+      elif level == 5:
+        print('Type 1 to look at guns and ammo')
+        print('Type 2 to look at traps and trap bait')
+        storetype1 = input()
+        if storetype1 == "1":
+          print('GUNS AND AMMO')
+          print('Type 1 to buy a rifle (30 coins), 2 to buy rifle ammo(1 each), 3 to buy a shotgun(50)(cheaper shells), and 4 to buy shotgun shells(1)')
+          gunpurchase1 = input()
+          if gunpurchase1 == "1":
+            purchase(30)
+            rifle = True
+            guns += 1
+            clear()
+            menu()
+            xp += 5
+          if gunpurchase1 == "2":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(1)
+              quantity -= 1
+              rifleammo += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif gunpurchase1 == "3":
+            purchase(50)
+            shotgun = 1
+            guns += 1
+            clear()
+            menu()
+            xp += 5
+          if gunpurchase1 == "4":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(1)
+              quantity -= 1
+              shotgunshells += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+                xp += 1
+            clear()
+            menu()
+          else: 
+            invalid()
+        elif storetype1 == "2":
+          print('TRAPS')
+          print('Type 1 to purchase a trap/snare(5), type 2 to purchase bait for one trap(2), type 3 to purchase a water snare(125)(no bait needed), and type 4 to purchase a big game trap(250)(no bait needed)')
+          entervar = input()
+          if entervar == "1":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(5)
+              quantity -= 1
+              traps += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif entervar == "2":
+            print('How many do you want to buy?')
+            quantity = int(input())
+            while quantity > 0:
+              purchase(2)
+              quantity -= 1
+              trapbait += 1
+              xp += 1
+              if money < 1:
+                time.sleep(1)
+                print('No more money')
+                time.sleep(0.5)
+                invalid()
+            clear()
+            menu()
+          elif entervar == "3":
+            purchase(125)
+            watertrap = True
+            traps += 1
+            clear()
+            menu()
+            xp += 5
+          elif entervar == "4":
+            purchase(250)
+            bigtrap = 1
+            traps += 1
+            clear()
+            xp += 5
             menu()
           else:
             invalid()
@@ -429,6 +889,7 @@ def menu():
         else:
           invalid()
         print('Thank you for selling.')
+        xp += math.floor(skins / 10) 
         time.sleep(2)
         clear()
         menu()
